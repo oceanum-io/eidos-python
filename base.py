@@ -4,6 +4,7 @@ import os
 from jsonpatch import JsonPatch
 
 from .version import __version__
+from .core import EidosSpecification
 
 
 class EidosError(Exception):
@@ -11,7 +12,7 @@ class EidosError(Exception):
 
 
 class Eidos(EidosSpecification):
-    """Eidos class."""
+    """Eidos base class. This is the EIDOS base specification."""
 
     _checkpoint = None
 

@@ -2,9 +2,14 @@ import json
 import glob
 import os
 from jsonpatch import JsonPatch
+from pandas import DataFrame
+from geopandas import GeoDataFrame
+from xarray import Dataset
+from oceanum.datamesh import Query
 
 from .version import __version__
-from .core import EidosSpecification
+from .core.root import EidosSpecification
+from .core.dataspec import Datasource
 
 
 class EidosError(Exception):
@@ -26,9 +31,9 @@ class Eidos(EidosSpecification):
         """Initialize Eidos class from json."""
         return cls.from_dict(json.loads(spec))
 
-    def __init__(self, **data):
+    def __init__(self, **spec):
         """Initialize Eidos class."""
-        super().__init__(**data)
+        super().__init__(**spec)
         self._checkpoint = self.model_dump()
 
     def __str__(self):
@@ -40,11 +45,42 @@ class Eidos(EidosSpecification):
         print(f"EIDOS spec changed: {update}")
 
     def diff(self):
+        """Get diff since last checkpoint and reset checkpoint"""
         old = self._checkpoint
         self._checkpoint = self.model_dump()
         return (old, self._checkpoint)
 
     def json_diff(self):
-        """Diff."""
+        """Diff as JSON patch"""
         old, new = self.diff()
         return JsonPatch.from_diff(old, new)
+
+
+class EidosDatasource(Datasource):
+    """Convenience class for Eidos datasource from python data objects."""
+
+    def __init__(self, id, data):
+        """Initialize Eidos datasource.
+
+        Args:
+            id (str): The ID of the datasource.
+            data (DataFrame, GeoDataFrame, Dataset, Query): The data to be used for the datasource.
+
+        Raises:
+            EidosError: If an invalid inline data type is provided.
+
+        """
+        if isinstance(data, DataFrame):
+            data = data.to_xarray().to_dict()
+            dtype = "inlineDataset"
+        elif isinstance(data, GeoDataFrame):
+            data = data.__geo_interface__
+            dtype = "featureCollection"
+        elif isinstance(data, Dataset):
+            data = data.to_dict()
+            dtype = "inlineDataset"
+        elif isinstance(data, Query):
+            dtpe = "oceanumDatamesh"
+        else:
+            raise EidosError("Invalid inline data type")
+        super().__init__(id=id, dataType=dtype, dataSpec=data)

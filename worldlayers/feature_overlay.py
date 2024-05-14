@@ -20,7 +20,7 @@ class FeatureLayerDatakeys(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     t: Optional[str] = None
 
@@ -31,9 +31,9 @@ class FeatureLayer(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    datakeys: FeatureLayerDatakeys
+    dataKeys: FeatureLayerDatakeys
     hoverInfo: Optional[world.HoverInfo] = None
     timeSelect: Optional[state.TimeSelect] = None
     geometry: Optional[world.Geometry] = None

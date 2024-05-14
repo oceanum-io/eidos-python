@@ -21,17 +21,17 @@ class Gltf(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
-    field_default: str = Field(..., alias='_default')
+    field_default: str = Field(..., alias="_default")
 
 
 class Scenegraph(EidosModel):
-    key: Optional[str] = Field(None, title='Scenegraph key')
+    key: Optional[str] = Field(None, title="Scenegraph key")
     """
     Data field to use as key for scenegraph model
     """
-    gltf: Gltf = Field(..., title='GLTF models')
+    gltf: Gltf = Field(..., title="GLTF models")
     """
     name or URLs of GLTF model keyed to data property
     """
@@ -43,20 +43,20 @@ class ScenegraphLayerDatakeys(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     x: str
     y: str
-    z: Optional[str] = 'z'
-    roll: Optional[str] = 'roll'
-    pitch: Optional[str] = 'pitch'
-    yaw: Optional[str] = 'yaw'
-    xoffset: Optional[str] = 'xoffset'
-    yoffset: Optional[str] = 'yoffset'
-    zoffset: Optional[str] = 'zoffset'
-    xscale: Optional[str] = 'xscale'
-    yscale: Optional[str] = 'yscale'
-    zscale: Optional[str] = 'zscale'
+    z: Optional[str] = "z"
+    roll: Optional[str] = "roll"
+    pitch: Optional[str] = "pitch"
+    yaw: Optional[str] = "yaw"
+    xoffset: Optional[str] = "xoffset"
+    yoffset: Optional[str] = "yoffset"
+    zoffset: Optional[str] = "zoffset"
+    xscale: Optional[str] = "xscale"
+    yscale: Optional[str] = "yscale"
+    zscale: Optional[str] = "zscale"
 
 
 class ScenegraphLayer(EidosModel):
@@ -65,9 +65,9 @@ class ScenegraphLayer(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    datakeys: ScenegraphLayerDatakeys
+    dataKeys: ScenegraphLayerDatakeys
     hoverInfo: Optional[world.HoverInfo] = None
     timeSelect: Optional[state.TimeSelect] = None
     geometry: Optional[features.Feature] = None

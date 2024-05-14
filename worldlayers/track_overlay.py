@@ -14,11 +14,11 @@ from ..viewnodes import world
 
 
 class Track(EidosModel):
-    key: Optional[str] = Field(None, title='Track key')
+    key: Optional[str] = Field(None, title="Track key")
     """
     Data field to use as key for grouping tracks
     """
-    history: Optional[str] = Field('PT1H', title='Track history')
+    history: Optional[str] = Field("PT1H", title="Track history")
     """
     Length of previous positions to show (ISO8601 period)
     """
@@ -30,7 +30,7 @@ class TrackLayerDatakeys(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='allow',
+        extra="allow",
     )
     x: str
     y: str
@@ -43,9 +43,9 @@ class TrackLayer(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    datakeys: TrackLayerDatakeys
+    dataKeys: TrackLayerDatakeys
     hoverInfo: Optional[world.HoverInfo] = None
     colormap: Optional[world.Colormap] = None
     style: Optional[Dict[str, Any]] = None

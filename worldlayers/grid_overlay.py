@@ -58,9 +58,9 @@ class GridLayer(EidosModel):
     """
 
     model_config = ConfigDict(
-        extra='forbid',
+        extra="forbid",
     )
-    datakeys: GridLayerDatakeys
+    dataKeys: GridLayerDatakeys
     hoverInfo: Optional[world.HoverInfo] = None
     legend: Optional[world.Colormap] = None
     colormap: world.Colormap

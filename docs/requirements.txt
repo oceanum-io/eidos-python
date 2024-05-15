@@ -1,0 +1,5 @@
+oceanum
+autodoc-pydantic
+pydata-sphinx-theme
+sphinxcontrib-programoutput
+decorator

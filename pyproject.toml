@@ -1,0 +1,52 @@
+[build-system]
+requires = ['setuptools', 'setuptools_scm']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'eidos'
+description = 'Python bindings for the EIDOS framework. Create and edit EIDOS specs from python.'
+readme = 'README.rst'
+license = {file = 'LICENSE'}
+authors = [{name='Oceanum.io', email='support@oceanum.io'}]
+dependencies = [
+    "pydantic",
+    "altair"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: MIT",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",    
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+requires-python = '>=3.9'
+dynamic = ['version']
+
+[tools.setuptools.package-dir]
+eidos='eidos'
+
+[tools.setuptools.dynamic]
+version = {attr = 'eidos.version.version'}
+
+[tool.setuptools_scm]
+write_to = 'eidos/version.py'
+version_scheme = 'python-simplified-semver'
+local_scheme = 'no-local-version'
+
+[project.urls]
+'Homepage' = 'https://oceanum.io'
+
+[project.optional-dependencies]
+test=[
+    'pytest',
+    'pytest-cov',
+    'tox'
+]
+development=[
+    'datamodel-code-generator'
+]
+doc = ['sphinx']

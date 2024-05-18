@@ -1,5 +1,6 @@
 import copy
 from pydantic import BaseModel, ConfigDict
+from typing import TYPE_CHECKING
 
 
 class EidosModel(BaseModel):

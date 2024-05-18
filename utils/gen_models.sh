@@ -40,6 +40,11 @@ perl -p -i -e "s|https\:\/\/oceanum\.io\/schemas\/eidos|$TMP\/core|g" $TMP/*/*.j
 perl -p -i -e "s|https\:\/\/oceanum\.io\/schemas|$TMP|g" $TMP/*/*.json
 perl -p -i -e "s|https\:\/\/vega\.github\.io\/schema\/vega-lite\/v5.json|$TMP/vegaspec.json|g" $TMP/viewnodes/plot.json
 
-datamodel-codegen --input-file-type jsonschema --input $TMP --output $ROOTDIR/eidos/ --output-model-type pydantic_v2.BaseModel --base-class=eidos._basemodel.EidosModel --use-subclass-enum --use-schema-description --use-field-description
+datamodel-codegen --input-file-type jsonschema --input $TMP --output $ROOTDIR/oceanum/eidos/ --output-model-type pydantic_v2.BaseModel --base-class=oceanum.eidos._basemodel.EidosModel --use-subclass-enum --use-schema-description --use-field-description
+
+#Patch codegen bug
+perl -p -i -e "s|viewnodesworld|viewnodes\.world|g" $ROOTDIR/oceanum/eidos/worldlayers/*.py
+perl -p -i -e "s|layerSpec: LayerSpec|layerSpec: Any|g" $ROOTDIR/oceanum/eidos/viewnodes/world.py
+
 python $ROOTDIR/utils/gen_init.py
 

@@ -1,6 +1,8 @@
 import os
 
-ROOTDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "eidos")
+ROOTDIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "oceanum", "eidos"
+)
 
 
 def write_init(curdir):

@@ -42,7 +42,12 @@ class Eidos(EidosSpecification):
 
     def _change(self, update):
         """Change."""
-        print(f"EIDOS spec changed: {update}")
+        pass
+        # print(f"EIDOS spec changed: {update}")
+
+    def model_dump(self, **kwargs):
+        """Dump model as dictionary."""
+        return super().model_dump(**{**kwargs, "exclude_none": True})
 
     def diff(self):
         """Get diff since last checkpoint and reset checkpoint"""
@@ -50,16 +55,16 @@ class Eidos(EidosSpecification):
         self._checkpoint = self.model_dump()
         return (old, self._checkpoint)
 
-    def json_diff(self):
+    def patch(self):
         """Diff as JSON patch"""
         old, new = self.diff()
-        return JsonPatch.from_diff(old, new)
+        return JsonPatch.from_diff(old, new).patch
 
 
 class EidosDatasource(Datasource):
     """Convenience class for Eidos datasource from python data objects."""
 
-    def __init__(self, id, data):
+    def __init__(self, id, data, coordkeys={}):
         """Initialize Eidos datasource.
 
         Args:
@@ -70,14 +75,18 @@ class EidosDatasource(Datasource):
             EidosError: If an invalid inline data type is provided.
 
         """
-        if isinstance(data, DataFrame):
-            data = data.to_xarray().to_dict()
-            dtype = "inlineDataset"
-        elif isinstance(data, GeoDataFrame):
+
+        if isinstance(data, GeoDataFrame):
             data = data.__geo_interface__
+            data["coordkeys"] = {**coordkeys, "g": "geometry"}
             dtype = "featureCollection"
+        elif isinstance(data, DataFrame):
+            data = data.to_xarray().to_dict()
+            data["coordkeys"] = coordkeys
+            dtype = "inlineDataset"
         elif isinstance(data, Dataset):
             data = data.to_dict()
+            data["coordkeys"] = coordkeys
             dtype = "inlineDataset"
         elif isinstance(data, Query):
             dtpe = "oceanumDatamesh"

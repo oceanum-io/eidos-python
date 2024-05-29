@@ -16,7 +16,6 @@ dependencies = [
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: MIT",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -51,3 +50,4 @@ development=[
     'datamodel-code-generator'
 ]
 doc = ['sphinx']
+

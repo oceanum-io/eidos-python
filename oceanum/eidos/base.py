@@ -40,7 +40,7 @@ class Eidos(EidosSpecification):
         """Return string representation of Eidos class."""
         return self.model_dump_json(indent=2)
 
-    def _change(self, update):
+    def _change(self):
         """Change."""
         pass
         # print(f"EIDOS spec changed: {update}")
@@ -59,6 +59,10 @@ class Eidos(EidosSpecification):
         """Diff as JSON patch"""
         old, new = self.diff()
         return JsonPatch.from_diff(old, new).patch
+
+    def spec(self):
+        """Return the full EIDOS specification."""
+        return self.model_dump()
 
 
 class EidosDatasource(Datasource):
@@ -89,7 +93,7 @@ class EidosDatasource(Datasource):
             data["coordkeys"] = coordkeys
             dtype = "inlineDataset"
         elif isinstance(data, Query):
-            dtpe = "oceanumDatamesh"
+            dtype = "oceanumDatamesh"
         else:
             raise EidosError("Invalid inline data type")
         super().__init__(id=id, dataType=dtype, dataSpec=data)

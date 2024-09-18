@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>eidos</title>
+  </head>
+  <body>
+    <iframe id="eidos" src="{{renderer}}?id=eidos" style="width: 100%; height: 100%; border: none;"></iframe>
+  </body>
+  <script>
+    window.addEventListener('message', function(event) {
+      if (event.origin !== '{{renderer}}') {
+        return;
+      }
+      if (event.data.type === 'eidos') {
+        console.log(event.data);
+      }
+    });
+    const spec={{spec}};
+    const iframe = document.getElementById('eidos');
+    iframe.onload=function(){
+      iframe.contentWindow.postMessage(
+        { id: "eidos", type: 'spec', payload: spec },
+        '*',
+      );
+    }
+  </script>
+</html>

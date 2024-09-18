@@ -11,7 +11,11 @@ authors = [{name='Oceanum.io', email='support@oceanum.io'}]
 dependencies = [
     "oceanum",
     "pydantic",
-    "altair"
+    "pandas",
+    "geopandas",
+    "xarray",
+    "altair",
+    "jinja2"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -26,11 +30,11 @@ classifiers = [
 requires-python = '>=3.9'
 dynamic = ['version']
 
-[tools.setuptools.package-dir]
-oceanum.eidos='oceanum/eidos'
+[tool.setuptools.package-dir]
+'oceanum.eidos'='oceanum/eidos'
 
-[tools.setuptools.dynamic]
-version = {attr = 'eidos.version.version'}
+[tool.setuptools.dynamic]
+version = {attr = 'oceanum.eidos.version.version'}
 
 [tool.setuptools_scm]
 write_to = 'oceanum/eidos/version.py'
@@ -50,4 +54,12 @@ development=[
     'datamodel-code-generator'
 ]
 doc = ['sphinx']
+
+# pyproject.toml
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
 

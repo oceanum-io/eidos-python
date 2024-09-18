@@ -1,6 +1,10 @@
 import json
 import glob
 import os
+import time
+import tempfile
+import webbrowser
+import jinja2
 from jsonpatch import JsonPatch
 from pandas import DataFrame
 from geopandas import GeoDataFrame
@@ -10,6 +14,13 @@ from oceanum.datamesh import Query
 from .version import __version__
 from .core.root import EidosSpecification
 from .core.dataspec import Datasource
+
+EIDOS_RENDERER = os.environ.get("EIDOS_RENDERER", "https://render.eidos.oceanum.io")
+TEMPLATES_PATH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "./templates/"
+)
+j2_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
+j2_env = jinja2.Environment(loader=j2_loader, trim_blocks=True)
 
 
 class EidosError(Exception):
@@ -63,6 +74,19 @@ class Eidos(EidosSpecification):
     def spec(self):
         """Return the full EIDOS specification."""
         return self.model_dump()
+
+    def html(self, renderer=EIDOS_RENDERER):
+        """Return the EIDOS specification as a displayable HTML page."""
+        template = j2_env.get_template("index.j2")
+        return template.render(spec=self.model_dump_json(), renderer=renderer)
+
+    def show(self, renderer=EIDOS_RENDERER):
+        with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as f:
+            f.write(self.html(renderer).encode())
+            f.close()
+            url = "file://{}".format(f.name)
+            time.sleep(1.0)
+            return webbrowser.open_new_tab(url)
 
 
 class EidosDatasource(Datasource):

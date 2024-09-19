@@ -14,6 +14,7 @@ from oceanum.datamesh import Query
 from .version import __version__
 from .core.root import EidosSpecification
 from .core.dataspec import Datasource
+from .exceptions import EidosError
 
 EIDOS_RENDERER = os.environ.get("EIDOS_RENDERER", "https://render.eidos.oceanum.io")
 TEMPLATES_PATH = os.path.join(
@@ -24,7 +25,7 @@ j2_env = jinja2.Environment(loader=j2_loader, trim_blocks=True)
 
 
 class EidosError(Exception):
-    """Base class for eidos exceptions."""
+    """Base class for Eidos exceptions."""
 
 
 class Eidos(EidosSpecification):

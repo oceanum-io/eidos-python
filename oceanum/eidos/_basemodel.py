@@ -1,6 +1,8 @@
 import copy
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, ValidationError
 from typing import TYPE_CHECKING
+
+from .exceptions import EidosSpecError
 
 
 class ListProxy(list):
@@ -45,7 +47,9 @@ class ListProxy(list):
 
 
 class EidosModel(BaseModel):
-    model_config: ConfigDict = ConfigDict(use_enum_values=True)
+    model_config: ConfigDict = ConfigDict(
+        use_enum_values=True, validate_assignment=True
+    )
     _parent = None
 
     def __init__(self, **data):
@@ -70,7 +74,10 @@ class EidosModel(BaseModel):
             value = ListProxy(value)
         if not name.startswith("_"):
             self._set_as_parent(value)
-        super().__setattr__(name, value)
+        try:
+            super().__setattr__(name, value)
+        except ValidationError as e:
+            raise EidosSpecError(e)
         if name[0] != "_":
             self._change()
 

@@ -38,7 +38,7 @@ version = {attr = 'oceanum.eidos.version.version'}
 
 [tool.setuptools_scm]
 write_to = 'oceanum/eidos/version.py'
-version_scheme = 'guess-next-dev'
+version_scheme = 'only-version'
 local_scheme = 'no-local-version'
 
 [project.urls]

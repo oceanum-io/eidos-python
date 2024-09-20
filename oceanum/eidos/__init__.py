@@ -4,5 +4,6 @@ from .features import *
 from .oceanql import *
 from .vegaspec import *
 from .version import *
+from .exceptions import *
 from .worldlayers import *
 from .viewnodes import *

@@ -5,6 +5,7 @@ import time
 import tempfile
 import webbrowser
 import jinja2
+import altair
 from jsonpatch import JsonPatch
 from pandas import DataFrame
 from geopandas import GeoDataFrame
@@ -14,11 +15,12 @@ from oceanum.datamesh import Query
 from .version import __version__
 from .core.root import EidosSpecification
 from .core.dataspec import Datasource
+from .vegaspec import TopLevelSpec
 from .exceptions import EidosError
 
 EIDOS_RENDERER = os.environ.get("EIDOS_RENDERER", "https://render.eidos.oceanum.io")
 TEMPLATES_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "./templates/"
+    os.path.dirname(os.path.abspath(__file__)), "./_templates/"
 )
 j2_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
 j2_env = jinja2.Environment(loader=j2_loader, trim_blocks=True)
@@ -91,20 +93,19 @@ class Eidos(EidosSpecification):
 
 
 class EidosDatasource(Datasource):
-    """Convenience class for Eidos datasource from python data objects."""
+    """Convenience class to create Eidos :class:`eidos.Datasource` from python data objects. Use these objects in the root level data field of the Eidos spec.
+
+    Args:
+        id (str): The ID of the datasource.
+        data (DataFrame, GeoDataFrame, Dataset, OceanQL Query): The data to be used for the datasource.
+        coordkeys (dict): The coordinate keys for the data. Default is empty dict.
+
+    Raises:
+        EidosError: If an invalid inline data type is provided.
+
+    """
 
     def __init__(self, id, data, coordkeys={}):
-        """Initialize Eidos datasource.
-
-        Args:
-            id (str): The ID of the datasource.
-            data (DataFrame, GeoDataFrame, Dataset, Query): The data to be used for the datasource.
-
-        Raises:
-            EidosError: If an invalid inline data type is provided.
-
-        """
-
         if isinstance(data, GeoDataFrame):
             data = data.__geo_interface__
             data["coordkeys"] = {**coordkeys, "g": "geometry"}
@@ -122,3 +123,19 @@ class EidosDatasource(Datasource):
         else:
             raise EidosError("Invalid inline data type")
         super().__init__(id=id, dataType=dtype, dataSpec=data)
+
+
+class EidosChart(TopLevelSpec):
+    """Convenience class to create :class:`eidos.TopLevelSpec` for a :class:`eidos.PlotView` node from Altair Chart. Use this object for the plotSpec field.
+    To use one of the defined EIDOS datasources in the Altair Chart, use a :class:`altair.NamedData` object with the id of the :class:`eidos.Datasource`.
+
+    Args:
+        chart (altair.Chart): The Altair Chart to be used for the plot.
+    Raises:
+        EidosError: If an invalid chart type is provided.
+    """
+
+    def __init__(self, chart):
+        if not isinstance(chart, altair.Chart):
+            raise EidosError("Invalid chart type - must be an Altair Chart object")
+        super().__init__(chart)

@@ -3,3 +3,5 @@ autodoc-pydantic
 pydata-sphinx-theme
 sphinxcontrib-programoutput
 decorator
+enum_tools
+sphinx-toolbox

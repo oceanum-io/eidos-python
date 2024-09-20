@@ -4,7 +4,15 @@ import altair as alt
 import pandas as pd
 import numpy as np
 
-from eidos import Eidos, Node, PlotView, TopLevelSpec, EidosSpecError
+from eidos import (
+    Eidos,
+    Node,
+    PlotView,
+    TopLevelSpec,
+    EidosSpecError,
+    EidosChart,
+    EidosDatasource,
+)
 
 
 @pytest.fixture
@@ -13,7 +21,7 @@ def data():
     data = pd.DataFrame(
         {"time": time, "value1": np.random.randn(100), "value2": np.random.randn(100)}
     ).set_index("time")
-    return data.to_xarray()
+    return EidosDatasource("data", data)
 
 
 @pytest.fixture
@@ -28,7 +36,7 @@ def basic_spec():
             color="Origin",
         )
     )
-    plot = PlotView(plotSpec=TopLevelSpec(chart))
+    plot = PlotView(plotSpec=EidosChart(chart))
     node = Node(
         id="test",
         nodeType="plot",
@@ -62,13 +70,7 @@ def test_change_fail(basic_spec):
 
 
 def test_named_data(basic_spec, data):
-    basic_spec.data = [
-        {
-            "id": "data",
-            "dataType": "inlineDataset",
-            "dataSpec": {**data.to_dict(), "coordkeys": {"x": "time"}},
-        }
-    ]
+    basic_spec.data = [data]
     chart = (
         alt.Chart(alt.NamedData("data"))
         .mark_point()

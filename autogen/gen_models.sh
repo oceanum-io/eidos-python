@@ -23,26 +23,21 @@ for layer in feature grid label scenegraph sea_surface track ; do
     curl -s $SCHEMAURL/worldlayers/$layer.json -o $TMP/worldlayers/$layer.json
 done
 
-
-
-#Create a stub for the vega-lite schema
-# echo "{
-#     \"description\": \"Vega or Vega-Lite specification\",
-#     \"type\": \"object\",
-#     \"definitions\": {
-#         \"VegaSpec\": {
-#             \"title\":\"Vega spec\",
-#             \"description\": \"Top-level specification of a Vega or Vega-Lite visualization\",
-#             \"type\": \"object\",
-#             \"properties\": {
-#             }
-#         },
-#         \"TopLevelSpec\":{
-#             \"\$ref\": \"#/definitions/VegaSpec\"
-#         }
-#     },
+Create a stub for the vega-lite schema
+echo "{
+    \"description\": \"Vega or Vega-Lite specification\",
+    \"type\": \"object\",
+    \"definitions\": {
+        \"TopLevelSpec\": {
+            \"title\":\"Vega spec\",
+            \"description\": \"Top-level specification of a Vega or Vega-Lite visualization\",
+            \"type\": \"object\",
+            \"properties\": {
+            }
+        },
+    },
     
-# }" > $TMP/vegaspec.json
+}" > $TMP/vegaspec.json
 
 # Replace schema references
 perl -p -i -e "s|https\:\/\/schemas\.oceanum\.io\/eidos\/viewnodes|$TMP\/viewnodes|g" $TMP/*/*.json
@@ -58,4 +53,7 @@ perl -p -i -e "s|viewnodesworld|viewnodes\.world|g" $ROOTDIR/oceanum/eidos/world
 perl -p -i -e "s|layerSpec: LayerSpec|layerSpec: Any|g" $ROOTDIR/oceanum/eidos/viewnodes/world.py
 
 python $ROOTDIR/autogen/gen_init.py
+
+#vegaspec is a special case - copy Altair wrapper to vegaspec.py
+cp $ROOTDIR/autogen/_vegaspec.py $ROOTDIR/oceanum/eidos/vegaspec.py
 

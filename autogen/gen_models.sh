@@ -23,7 +23,7 @@ for layer in feature grid label scenegraph sea_surface track ; do
     curl -s $SCHEMAURL/worldlayers/$layer.json -o $TMP/worldlayers/$layer.json
 done
 
-Create a stub for the vega-lite schema
+#Create a stub for the vega-lite schema
 echo "{
     \"description\": \"Vega or Vega-Lite specification\",
     \"type\": \"object\",

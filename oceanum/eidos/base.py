@@ -78,10 +78,14 @@ class Eidos(EidosSpecification):
         """Return the full EIDOS specification."""
         return self.model_dump()
 
-    def html(self, renderer=EIDOS_RENDERER):
+    def html(self, title=None, renderer=EIDOS_RENDERER):
         """Return the EIDOS specification as a displayable HTML page."""
         template = j2_env.get_template("index.j2")
-        return template.render(spec=self.model_dump_json(), renderer=renderer)
+        return template.render(
+            spec=self.model_dump_json(),
+            title=title or self.name or "EIDOS",
+            renderer=renderer,
+        )
 
     def show(self, renderer=EIDOS_RENDERER):
         with tempfile.NamedTemporaryFile(suffix=".html", delete=False) as f:

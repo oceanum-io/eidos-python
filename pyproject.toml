@@ -34,12 +34,7 @@ dynamic = ['version']
 'oceanum.eidos'='oceanum/eidos'
 
 [tool.setuptools.dynamic]
-version = {attr = 'oceanum.eidos.version.version'}
-
-[tool.setuptools_scm]
-write_to = 'oceanum/eidos/version.py'
-version_scheme = 'only-version'
-local_scheme = 'no-local-version'
+version = {attr = 'oceanum.eidos.version.__version__'}
 
 [project.urls]
 'Homepage' = 'https://oceanum.io'

@@ -7,9 +7,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   eidos.core
-   eidos.viewnodes
-   eidos.worldlayers
+   eidos
+   eidos.nodes
 
 Submodules
 ----------

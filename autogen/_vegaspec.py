@@ -1,4 +1,5 @@
 import altair
+import json
 from pydantic import RootModel, model_validator
 from .exceptions import EidosSpecError
 
@@ -20,13 +21,7 @@ class TopLevelSpec(RootModel[dict]):
     @classmethod
     def validate(cls, spec: dict | str | altair.Chart):
         if isinstance(spec, dict):
-            try:
-                spec = altair.Chart.from_dict(spec)
-            except Exception as e:
-                raise EidosSpecError(e)
+            return spec
         elif isinstance(spec, str):
-            try:
-                spec = altair.Chart.from_json(spec)
-            except Exception as e:
-                raise EidosSpecError(e)
+            return json.loads(spec)
         return spec.to_dict()

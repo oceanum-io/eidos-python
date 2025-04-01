@@ -1,5 +1,5 @@
 import json
-import glob
+import re
 import os
 import time
 import tempfile
@@ -7,14 +7,14 @@ import webbrowser
 import jinja2
 import altair
 from jsonpatch import JsonPatch
-from pandas import DataFrame
+from pandas import DataFrame, Timestamp
 from geopandas import GeoDataFrame
 from xarray import Dataset
 from oceanum.datamesh import Query
 
 from .version import __version__
-from .core.root import EidosSpecification
-from .core.dataspec import Datasource
+from .root import EidosSpecification
+from .data import EidosData
 from .vegaspec import TopLevelSpec
 from .exceptions import EidosError
 
@@ -96,7 +96,14 @@ class Eidos(EidosSpecification):
             return webbrowser.open_new_tab(url)
 
 
-class EidosDatasource(Datasource):
+def isotime(x):
+    t = Timestamp(x)
+    if not t.tz:
+        t = t.tz_localize("UTC")
+    return t.isoformat()
+
+
+class EidosDatasource(EidosData):
     """Convenience class to create Eidos :class:`eidos.Datasource` from python data objects. Use these objects in the root level data field of the Eidos spec.
 
     Args:
@@ -115,17 +122,27 @@ class EidosDatasource(Datasource):
             data["coordkeys"] = {**coordkeys, "g": "geometry"}
             dtype = "featureCollection"
         elif isinstance(data, DataFrame):
-            data = data.to_xarray().to_dict()
-            data["coordkeys"] = coordkeys
-            dtype = "inlineDataset"
+            data = data.to_xarray()
+            dtype = "dataset"
         elif isinstance(data, Dataset):
-            data = data.to_dict()
-            data["coordkeys"] = coordkeys
-            dtype = "inlineDataset"
+            dtype = "dataset"
         elif isinstance(data, Query):
             dtype = "oceanumDatamesh"
         else:
             raise EidosError("Invalid inline data type")
+        if dtype == "dataset":
+            rename = {v: re.sub(r"[^a-zA-Z0-9_]", "_", v) for v in data.variables}
+            data = data.rename(rename).to_dict()
+            data["coordkeys"] = coordkeys
+            if "t" in coordkeys:  # Sanitize time data to iso8601 strings
+                if coordkeys["t"] in data["coords"]:
+                    data["coords"][coordkeys["t"]]["data"] = [
+                        isotime(x) for x in data["coords"][coordkeys["t"]]["data"]
+                    ]
+                elif coordkeys["t"] in data["vars"]:
+                    data["vars"][coordkeys["t"]]["data"] = [
+                        isotime(x) for x in data["vars"][coordkeys["t"]]["data"]
+                    ]
         super().__init__(id=id, dataType=dtype, dataSpec=data)
 
 

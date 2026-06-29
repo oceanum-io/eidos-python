@@ -54,7 +54,7 @@ class EidosModel(BaseModel):
 
     @model_validator(mode="after")
     def attach_parent(self):
-        for name, _ in self.model_fields.items():
+        for name, _ in type(self).model_fields.items():
             if not name.startswith("_"):
                 value = self.__dict__[name]
                 if isinstance(value, list):

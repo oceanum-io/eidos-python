@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from oceanum.eidos._basemodel import EidosModel
+from ._basemodel import EidosModel
 from pydantic import ConfigDict, Field, RootModel, constr
 
 

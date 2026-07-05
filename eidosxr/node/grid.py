@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from typing import List, Literal, Optional, Union
 
-from oceanum.eidos._basemodel import EidosModel
+from eidosxr._basemodel import EidosModel
 from pydantic import ConfigDict, Field, conint
 
 from .. import theme

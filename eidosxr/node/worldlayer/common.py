@@ -7,7 +7,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import List, Optional, Union
 
-from oceanum.eidos._basemodel import EidosModel
+from eidosxr._basemodel import EidosModel
 from pydantic import AnyUrl, ConfigDict, Field, RootModel
 
 

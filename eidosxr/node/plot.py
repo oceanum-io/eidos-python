@@ -7,7 +7,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal, Optional
 
-from oceanum.eidos._basemodel import EidosModel
+from eidosxr._basemodel import EidosModel
 from pydantic import ConfigDict
 
 from .. import common, vegaspec

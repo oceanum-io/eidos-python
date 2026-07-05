@@ -7,7 +7,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, List, Optional
 
-from oceanum.eidos._basemodel import EidosModel
+from ._basemodel import EidosModel
 from pydantic import Field, RootModel
 
 

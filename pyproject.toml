@@ -3,9 +3,9 @@ requires = ['setuptools', 'setuptools_scm']
 build-backend = 'setuptools.build_meta'
 
 [project]
-name = 'oceanum.eidos'
-description = 'Python bindings for the EIDOS framework. Create and edit EIDOS specs from python.'
-readme = 'README.rst'
+name = 'eidosxr'
+description = 'Python bindings and API client for the EIDOS framework. Create, edit and manage EIDOS specs from python.'
+readme = 'README.md'
 license = {file = 'LICENSE'}
 authors = [{name='Oceanum.io', email='support@oceanum.io'}]
 dependencies = [
@@ -16,7 +16,8 @@ dependencies = [
     "xarray",
     "altair",
     "jinja2",
-    "jsonpatch"
+    "jsonpatch",
+    "requests"
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -25,17 +26,25 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",    
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: Implementation :: CPython",
 ]
 requires-python = '>=3.9'
 dynamic = ['version']
 
-[tool.setuptools.package-dir]
-'oceanum.eidos'='oceanum/eidos'
+# The code lives in the top-level ``eidosxr`` package (named to avoid the
+# unrelated ``eidos`` project on PyPI). The ``oceanum.eidos`` package is a thin
+# back-compatibility shim that re-exports ``eidosxr`` into the shared ``oceanum``
+# namespace, so ``from oceanum.eidos import ...`` keeps working.
+[tool.setuptools.packages.find]
+include = ['eidosxr*', 'oceanum.eidos']
+namespaces = true
+
+[tool.setuptools.package-data]
+'eidosxr._templates' = ['*.j2']
 
 [tool.setuptools.dynamic]
-version = {attr = 'oceanum.eidos.version.__version__'}
+version = {attr = 'eidosxr.version.__version__'}
 
 [tool.setuptools]
 license-files = []
@@ -47,6 +56,7 @@ license-files = []
 test=[
     'pytest',
     'pytest-cov',
+    'responses',
     'tox'
 ]
 development=[
@@ -54,11 +64,9 @@ development=[
 ]
 doc = ['sphinx']
 
-# pyproject.toml
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q"
 testpaths = [
     "tests"
 ]
-

@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from oceanum.eidos._basemodel import EidosModel
+from ._basemodel import EidosModel
 from oceanum.datamesh import Query
 
 

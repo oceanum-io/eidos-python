@@ -14,7 +14,7 @@ dependencies = [
     "pandas",
     "geopandas",
     "xarray",
-    "altair",
+    "altair>=6.0",
     "jinja2",
     "jsonpatch"
 ]
@@ -23,12 +23,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",    
+    "Programming Language :: Python :: 3.11",   
+    "Programming Language :: Python :: 3.12",   
     "Programming Language :: Python :: Implementation :: CPython",
 ]
-requires-python = '>=3.9'
+requires-python = '>=3.11'
 dynamic = ['version']
 
 [tool.setuptools.package-dir]

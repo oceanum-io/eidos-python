@@ -21,7 +21,7 @@ curl -s $SCHEMAURL/node/plot.json -o $TMP/node/plot.json
 curl -s $SCHEMAURL/node/world.json -o $TMP/node/world.json
 curl -s $SCHEMAURL/node/document.json -o $TMP/node/document.json
 
-for layer in feature gridded label scenegraph seasurface track ; do
+for layer in feature gridded label scenegraph seasurface track pointcloud; do
     curl -s $SCHEMAURL/node/worldlayer/$layer.json -o $TMP/node/worldlayer/$layer.json
 done
 
